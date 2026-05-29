@@ -1,0 +1,220 @@
+import { useState } from "react";
+import { FiMail, FiMapPin, FiClock } from "react-icons/fi";
+import { FaLinkedin, FaGithub } from "react-icons/fa";
+
+function Contact() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [submitStatus, setSubmitStatus] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  const recipientEmail = "budhathoki.nischal@gmail.com";
+  const address = "Jorpati, Kathmandu, Nepal";
+  const responseTime = "Within 24 hrs";
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Using FormSubmit.co (free service that sends emails)
+    try {
+      const response = await fetch("https://formspree.io/f/xyzjlzvk", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          _replyto: formData.email,
+        }),
+      });
+
+      if (response.ok) {
+        // If formspree doesn't work, use a simpler mailto approach
+        const mailtoLink = `mailto:${recipientEmail}?subject=Message from ${formData.name}&body=${encodeURIComponent(
+          `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+        )}`;
+        window.location.href = mailtoLink;
+
+        setSubmitStatus("success");
+        setFormData({ name: "", email: "", message: "" });
+        setTimeout(() => setSubmitStatus(""), 3000);
+      }
+    } catch (error) {
+      // Fallback to mailto
+      const mailtoLink = `mailto:${recipientEmail}?subject=Message from ${formData.name}&body=${encodeURIComponent(
+        `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+      )}`;
+      window.location.href = mailtoLink;
+    }
+  };
+
+  const copyEmail = () => {
+    navigator.clipboard.writeText(recipientEmail);
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  };
+
+  return (
+    <section
+      id="contact"
+      className="py-24 px-6 bg-gradient-to-br from-blue-900 via-slate-900 to-gray-900"
+    >
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <p className="text-orange-500 text-sm font-semibold tracking-widest uppercase mb-2">
+            Get In Touch
+          </p>
+          <h2 className="text-5xl font-bold text-white mb-4">Contact Me</h2>
+          <p className="text-gray-400 text-lg">
+            I'm currently open to new opportunities. Feel free to reach out.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-12">
+          {/* Form Section */}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <input
+              type="text"
+              name="name"
+              placeholder="Your name"
+              value={formData.name}
+              onChange={handleInputChange}
+              required
+              className="w-full p-4 rounded-xl border border-orange-500/30 bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:border-orange-500 transition-colors"
+            />
+
+            <input
+              type="email"
+              name="email"
+              placeholder="Your email"
+              value={formData.email}
+              onChange={handleInputChange}
+              required
+              className="w-full p-4 rounded-xl border border-orange-500/30 bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:border-orange-500 transition-colors"
+            />
+
+            <textarea
+              name="message"
+              rows="6"
+              placeholder="Write your message..."
+              value={formData.message}
+              onChange={handleInputChange}
+              required
+              className="w-full p-4 rounded-xl border border-orange-500/30 bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:border-orange-500 transition-colors resize-none"
+            />
+
+            <button
+              type="submit"
+              className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors"
+            >
+              <span>✈</span> Send Message
+            </button>
+
+            {submitStatus === "success" && (
+              <p className="text-green-400 text-sm">
+                Message sent successfully!
+              </p>
+            )}
+            <p className="text-gray-400 text-sm">
+              I'll receive your message at{" "}
+              <span className="font-semibold text-white">
+                {recipientEmail}
+              </span>
+              .
+            </p>
+          </form>
+
+          {/* Contact Info Section */}
+          <div>
+            {/* Contact Details */}
+            <div className="space-y-6">
+              {/* Address */}
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
+                  <FiMapPin className="w-6 h-6 text-orange-500" />
+                </div>
+                <div>
+                  <p className="text-gray-400 text-sm font-medium">Address</p>
+                  <p className="text-white font-semibold">{address}</p>
+                </div>
+              </div>
+
+              {/* Email */}
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
+                  <FiMail className="w-6 h-6 text-orange-500" />
+                </div>
+                <div>
+                  <p className="text-gray-400 text-sm font-medium">Email</p>
+                  <p className="text-white font-semibold">{recipientEmail}</p>
+                </div>
+              </div>
+
+              {/* Response Time */}
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
+                  <FiClock className="w-6 h-6 text-orange-500" />
+                </div>
+                <div>
+                  <p className="text-gray-400 text-sm font-medium">
+                    Response time
+                  </p>
+                  <p className="text-white font-semibold">{responseTime}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Social Links */}
+            <div className="mt-8 pt-8 border-t border-orange-500/30">
+              <p className="text-gray-400 text-sm font-medium mb-4 uppercase">
+                Join Me In
+              </p>
+              <div className="flex gap-4">
+                <a
+                  href="https://linkedin.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 rounded-lg border border-orange-500/30 bg-white/5 hover:bg-orange-500/20 flex items-center justify-center text-white transition-colors"
+                >
+                  <FaLinkedin className="w-6 h-6" />
+                </a>
+                <a
+                  href="https://github.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 rounded-lg border border-orange-500/30 bg-white/5 hover:bg-orange-500/20 flex items-center justify-center text-white transition-colors"
+                >
+                  <FaGithub className="w-6 h-6" />
+                </a>
+                <button
+                  onClick={copyEmail}
+                  className="w-12 h-12 rounded-lg border border-orange-500/30 bg-white/5 hover:bg-orange-500/20 flex items-center justify-center text-white transition-colors"
+                >
+                  <FiMail className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default Contact;
