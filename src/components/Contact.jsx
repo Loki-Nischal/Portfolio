@@ -156,15 +156,18 @@ function Contact() {
               </div>
 
               {/* Email */}
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
+              <a 
+                href={`mailto:${recipientEmail}`} 
+                className="flex items-start gap-4 p-4 rounded-lg hover:bg-orange-500/10 transition-all duration-300 cursor-pointer group"
+              >
+                <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-orange-500/20 transition-colors">
                   <FiMail className="w-6 h-6 text-orange-500" />
                 </div>
                 <div>
                   <p className="text-gray-400 text-sm font-medium">Email</p>
-                  <p className="text-white font-semibold">{recipientEmail}</p>
+                  <p className="text-white font-semibold group-hover:text-orange-400 transition-colors">{recipientEmail}</p>
                 </div>
-              </div>
+              </a>
 
               {/* Response Time */}
               <div className="flex items-start gap-4">
@@ -202,12 +205,16 @@ function Contact() {
                 >
                   <FaGithub className="w-6 h-6" />
                 </a>
-                <button
-                  onClick={copyEmail}
-                  className="w-12 h-12 rounded-lg border border-orange-500/30 bg-white/5 hover:bg-orange-500/20 flex items-center justify-center text-white transition-colors"
+                <a
+                  href={`mailto:${recipientEmail}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.location.href = `mailto:${recipientEmail}`;
+                  }}
+                  className="w-12 h-12 rounded-lg border border-orange-500/30 bg-white/5 hover:bg-orange-500/20 flex items-center justify-center text-white transition-colors cursor-pointer"
                 >
                   <FiMail className="w-6 h-6" />
-                </button>
+                </a>
               </div>
             </div>
           </div>
