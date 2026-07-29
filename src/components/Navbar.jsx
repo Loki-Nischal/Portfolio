@@ -1,6 +1,10 @@
 import { Link } from "react-scroll";
 import { FaGithub, FaLinkedin, FaCode } from "react-icons/fa";
 
+const githubProfileUrl = "https://github.com/Loki-Nischal";
+const linkedinProfileUrl =
+  "https://www.linkedin.com/in/nischal-budhathoki-ab8906327/";
+
 function Navbar() {
   return (
     <nav className="fixed top-0 w-full z-50 backdrop-blur-md bg-gradient-to-r from-slate-900/80 to-slate-800/80 border-b border-orange-500/30">
@@ -28,10 +32,10 @@ function Navbar() {
         </div>
 
         <div className="flex gap-5 text-xl text-white">
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-orange-400 transition-colors duration-300">
+          <a href={githubProfileUrl} target="_blank" rel="noopener noreferrer" className="hover:text-orange-400 transition-colors duration-300" aria-label="GitHub profile">
             <FaGithub />
           </a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-orange-400 transition-colors duration-300">
+          <a href={linkedinProfileUrl} target="_blank" rel="noopener noreferrer" className="hover:text-orange-400 transition-colors duration-300" aria-label="LinkedIn profile">
             <FaLinkedin />
           </a>
         </div>

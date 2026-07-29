@@ -2,6 +2,10 @@ import { useState } from "react";
 import { FiMail, FiMapPin, FiClock } from "react-icons/fi";
 import { FaLinkedin, FaGithub } from "react-icons/fa";
 
+const githubProfileUrl = "https://github.com/Loki-Nischal";
+const linkedinProfileUrl =
+  "https://www.linkedin.com/in/nischal-budhathoki-ab8906327/";
+
 function Contact() {
   const [formData, setFormData] = useState({
     name: "",
@@ -12,6 +16,7 @@ function Contact() {
   const [copied, setCopied] = useState(false);
 
   const recipientEmail = "budhathoki.nischal@gmail.com";
+  const formEndpoint = `https://formsubmit.co/${recipientEmail}`;
   const address = "Jorpati, Kathmandu, Nepal";
   const responseTime = "Within 24 hrs";
 
@@ -26,38 +31,32 @@ function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Using FormSubmit.co (free service that sends emails)
+    // Send directly to a form service so the message reaches the inbox.
     try {
-      const response = await fetch("https://formspree.io/f/xyzjlzvk", {
+      const response = await fetch(formEndpoint, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          Accept: "application/json",
         },
-        body: JSON.stringify({
+        body: new URLSearchParams({
           name: formData.name,
           email: formData.email,
           message: formData.message,
-          _replyto: formData.email,
+          _subject: `Message from ${formData.name}`,
+          _captcha: "false",
         }),
       });
 
       if (response.ok) {
-        // If formspree doesn't work, use a simpler mailto approach
-        const mailtoLink = `mailto:${recipientEmail}?subject=Message from ${formData.name}&body=${encodeURIComponent(
-          `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
-        )}`;
-        window.location.href = mailtoLink;
-
         setSubmitStatus("success");
         setFormData({ name: "", email: "", message: "" });
         setTimeout(() => setSubmitStatus(""), 3000);
+      } else {
+        throw new Error("Failed to send message");
       }
     } catch (error) {
-      // Fallback to mailto
-      const mailtoLink = `mailto:${recipientEmail}?subject=Message from ${formData.name}&body=${encodeURIComponent(
-        `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
-      )}`;
-      window.location.href = mailtoLink;
+      setSubmitStatus("error");
+      setTimeout(() => setSubmitStatus(""), 3000);
     }
   };
 
@@ -131,6 +130,11 @@ function Contact() {
                 Message sent successfully!
               </p>
             )}
+            {submitStatus === "error" && (
+              <p className="text-red-400 text-sm">
+                Message could not be sent. Please email me directly at {recipientEmail}.
+              </p>
+            )}
             <p className="text-gray-400 text-sm">
               I'll receive your message at{" "}
               <span className="font-semibold text-white">
@@ -190,18 +194,20 @@ function Contact() {
               </p>
               <div className="flex gap-4">
                 <a
-                  href="https://linkedin.com"
+                  href={linkedinProfileUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-12 h-12 rounded-lg border border-orange-500/30 bg-white/5 hover:bg-orange-500/20 flex items-center justify-center text-white transition-colors"
+                  aria-label="LinkedIn profile"
                 >
                   <FaLinkedin className="w-6 h-6" />
                 </a>
                 <a
-                  href="https://github.com"
+                  href={githubProfileUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-12 h-12 rounded-lg border border-orange-500/30 bg-white/5 hover:bg-orange-500/20 flex items-center justify-center text-white transition-colors"
+                  aria-label="GitHub profile"
                 >
                   <FaGithub className="w-6 h-6" />
                 </a>

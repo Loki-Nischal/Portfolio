@@ -1,7 +1,6 @@
 import ecommerceImg from "../assets/ecommerce.png";
 import snakeImg from "../assets/snake.png";
 import todoImg from "../assets/todo.png";
-import getdateImg from "../assets/getdate.png";
 
 const projects = [
   {
@@ -24,13 +23,6 @@ const projects = [
     tech: "React Native, Firebase, Redux",
     image: todoImg,
     desc: "Cross-platform mobile app with cloud sync and real-time updates.",
-  },
-  {
-    title: "Getdate",
-    category: "Web Dev",
-    tech: "React, Node.js, MongoDB, Firebase",
-    image: getdateImg,
-    desc: "Full-stack dating platform with authentication and messaging.",
   },
 ];
 

@@ -8,6 +8,10 @@ import {
   FaLaptopCode
 } from "react-icons/fa";
 
+const githubProfileUrl = "https://github.com/Loki-Nischal";
+const linkedinProfileUrl =
+  "https://www.linkedin.com/in/nischal-budhathoki-ab8906327/";
+
 function Hero() {
   const [showTypewriter, setShowTypewriter] = useState(true);
 
@@ -70,8 +74,12 @@ function Hero() {
           </div>
 
           <div className="flex gap-5 text-2xl">
-            <FaGithub />
-            <FaLinkedin />
+            <a href={githubProfileUrl} target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+              <FaGithub />
+            </a>
+            <a href={linkedinProfileUrl} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
+              <FaLinkedin />
+            </a>
             <FaLaptopCode />
           </div>
 
